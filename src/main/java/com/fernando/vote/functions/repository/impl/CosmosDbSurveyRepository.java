@@ -3,13 +3,14 @@ package com.fernando.vote.functions.repository.impl;
 import com.azure.cosmos.CosmosClient;
 import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.cosmos.CosmosContainer;
-import com.azure.cosmos.models.CosmosBatch;
-import com.azure.cosmos.models.CosmosBatchResponse;
-import com.azure.cosmos.models.PartitionKey;
+import com.azure.cosmos.models.*;
 import com.fernando.vote.functions.exceptions.SurveyRepositoryException;
+import com.fernando.vote.functions.exceptions.VoteSendException;
 import com.fernando.vote.functions.models.containers.Option;
 import com.fernando.vote.functions.models.containers.Survey;
+import com.fernando.vote.functions.models.containers.Vote;
 import com.fernando.vote.functions.repository.SurveyRepository;
+import redis.clients.jedis.JedisPooled;
 
 import java.util.List;
 
@@ -38,5 +39,38 @@ public class CosmosDbSurveyRepository implements SurveyRepository {
             }
         }
         return survey;
+    }
+
+    @Override
+    public Long saveVote(String key) {
+        try(JedisPooled jedis = new JedisPooled(
+                System.getenv("REDIS_HOST"),
+                Integer.parseInt(System.getenv("REDIS_PORT")),
+                Boolean.parseBoolean(System.getenv("REDIS_SSL"))
+        )) {
+            return jedis.incr(key);
+        }
+    }
+
+    @Override
+    public Boolean existsKey(String key) {
+        try(JedisPooled jedis = new JedisPooled(
+                System.getenv("REDIS_HOST"),
+                Integer.parseInt(System.getenv("REDIS_PORT")),
+                Boolean.parseBoolean(System.getenv("REDIS_SSL"))
+        )) {
+            return jedis.exists(key);
+        }
+    }
+
+    @Override
+    public void appendKey(String key, String value) {
+        try(JedisPooled jedis = new JedisPooled(
+                System.getenv("REDIS_HOST"),
+                Integer.parseInt(System.getenv("REDIS_PORT")),
+                Boolean.parseBoolean(System.getenv("REDIS_SSL"))
+        )) {
+            jedis.append(key,value);
+        }
     }
 }
