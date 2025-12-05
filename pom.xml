@@ -82,6 +82,12 @@
             <version>5.1.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-messaging-servicebus</artifactId>
+            <version>7.14.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

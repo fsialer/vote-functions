@@ -9,9 +9,6 @@ import lombok.*;
 @Builder
 public class Option {
     private String id;
-    private String poolId;
-    private String type;
-    private String description;
-    private Integer quantityVotes;
-    private long ttl;
+    private String text;
+    private Long votes;
 }

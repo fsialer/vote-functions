@@ -2,6 +2,8 @@ package com.fernando.vote.functions.models.containers;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -10,9 +12,8 @@ import lombok.*;
 public class Survey {
     private String id;
     private String poolId;
-    private String type;
     private String question;
-    private Integer totalVotes;
-    private Boolean closed;
-    private long ttl;
+    private Long totalVotes;
+    private Boolean active;
+    private List<Option> options;
 }

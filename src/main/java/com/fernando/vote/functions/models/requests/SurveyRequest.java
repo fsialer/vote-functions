@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SurveyEvent {
+public class SurveyRequest {
     @JsonProperty("question")
     @NotEmpty(message = "Question is required.")
     private String question;

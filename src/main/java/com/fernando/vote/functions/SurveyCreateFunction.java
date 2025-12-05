@@ -5,13 +5,11 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fernando.vote.functions.exceptions.SurveyRepositoryException;
+import com.fernando.vote.functions.mapper.SurveyMapper;
 import com.fernando.vote.functions.models.containers.Survey;
-import com.fernando.vote.functions.models.requests.SurveyEvent;
-import com.fernando.vote.functions.repository.SurveyRepository;
-import com.fernando.vote.functions.repository.impl.CosmosDbSurveyRepository;
-import com.fernando.vote.functions.services.SaveQuestionUseCase;
-import com.fernando.vote.functions.services.impl.SurveyService;
+import com.fernando.vote.functions.models.requests.SurveyRequest;
+import com.fernando.vote.functions.services.ISurveyService;
+import com.fernando.vote.functions.services.impl.SurveyServiceImpl;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
 import jakarta.validation.ConstraintViolation;
@@ -40,9 +38,9 @@ public class SurveyCreateFunction {
                     .body("{\"error\":\"Request body is required\"}").build();
         }
         
-        SurveyEvent surveyEvent = objectMapper.readValue(body, SurveyEvent.class);
+        SurveyRequest surveyRequest = objectMapper.readValue(body, SurveyRequest.class);
 
-        Set<ConstraintViolation<SurveyEvent>> violations = validator.validate(surveyEvent);
+        Set<ConstraintViolation<SurveyRequest>> violations = validator.validate(surveyRequest);
         if (!violations.isEmpty()) {
             String errors = violations.stream()
                     .map(ConstraintViolation::getMessage)
@@ -52,10 +50,9 @@ public class SurveyCreateFunction {
         }
 
         try {
-            SurveyRepository repository = new CosmosDbSurveyRepository();
-            SaveQuestionUseCase surveyService = new SurveyService(repository);
-            
-            Survey createdSurvey = surveyService.createSurvey(surveyEvent);
+            SurveyMapper mapper=new SurveyMapper();
+            ISurveyService iSurveyService=new SurveyServiceImpl();
+            Survey createdSurvey = iSurveyService.createSurvey(mapper.surverRequestToSurvey(surveyRequest));
             
             Map<String, String> response = new HashMap<>();
             response.put("id", createdSurvey.getPoolId());
