@@ -1,5 +1,11 @@
 package com.fernando.vote.functions;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fernando.vote.functions.mapper.VoteMapper;
+import com.fernando.vote.functions.models.requests.SurveyIdRequest;
+import com.fernando.vote.functions.services.IVoteService;
+import com.fernando.vote.functions.services.impl.IVoteServiceImpl;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
 
@@ -12,10 +18,21 @@ public class WorkerFunction {
      */
     @FunctionName("WorkerFunction")
     public void run(
-            @ServiceBusQueueTrigger(name = "message", queueName = "vote-queue", connection = "REDIS_PORT") String message,
+            @ServiceBusQueueTrigger(name = "message", queueName = "vote-queue", connection = "SERVICE_BUS_CONNECTION") String message,
             final ExecutionContext context
     ) {
-        context.getLogger().info("Java Service Bus Queue trigger function executed.");
-        context.getLogger().info(message);
+
+        try {
+            ObjectMapper objectMapper=new ObjectMapper();
+            SurveyIdRequest surveyIdRequest=objectMapper.readValue(message, SurveyIdRequest.class);
+            VoteMapper voteMapper=new VoteMapper();
+            IVoteService iVoteService=new IVoteServiceImpl();
+            iVoteService.synVotes(voteMapper.surveyIdRequestToSurveyId(surveyIdRequest));
+            context.getLogger().info("Votes saved.");
+        } catch (RuntimeException | JsonProcessingException  e) {
+            context.getLogger().severe(e.getMessage());
+        }
     }
+
+
 }
