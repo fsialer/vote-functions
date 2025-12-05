@@ -16,7 +16,4 @@ public class VoteRequest {
     @JsonProperty("option_id")
     @NotNull(message = "option_id is required.")
     private String optionId;
-    @JsonProperty("device")
-    @NotNull(message = "device is required.")
-    private String device;
 }

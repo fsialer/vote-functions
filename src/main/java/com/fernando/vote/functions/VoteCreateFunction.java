@@ -3,11 +3,10 @@ package com.fernando.vote.functions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fernando.vote.functions.exceptions.VoteSendException;
+import com.fernando.vote.functions.mapper.VoteMapper;
 import com.fernando.vote.functions.models.requests.VoteRequest;
-import com.fernando.vote.functions.repository.SurveyRepository;
-import com.fernando.vote.functions.repository.impl.CosmosDbSurveyRepository;
-import com.fernando.vote.functions.services.SaveVoteUseCase;
-import com.fernando.vote.functions.services.impl.VoteService;
+import com.fernando.vote.functions.services.IVoteService;
+import com.fernando.vote.functions.services.impl.IVoteServiceImpl;
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
@@ -33,8 +32,6 @@ public class VoteCreateFunction {
             .buildValidatorFactory();
     private final Validator validator = factory.getValidator();
 
-
-
     @FunctionName("VoteCreateFunction")
     public HttpResponseMessage run(
             @HttpTrigger(name = "req", methods = {HttpMethod.GET, HttpMethod.POST}, authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request,
@@ -58,13 +55,12 @@ public class VoteCreateFunction {
         }
 
         try {
-            SurveyRepository repository = new CosmosDbSurveyRepository();
-            SaveVoteUseCase voteService = new VoteService(repository);
-
-            Long totalVotes = voteService.createVote(voteRequest,headers);
+            IVoteService iVoteService=new IVoteServiceImpl();
+            VoteMapper voteMapper=new VoteMapper();
+            long totalVotes = iVoteService.registerVote(voteMapper.voteRequestToVote(voteRequest));
 
             Map<String, String> response = new HashMap<>();
-            response.put("votes", totalVotes.toString());
+            response.put("votes", String.valueOf(totalVotes));
             response.put("message", "Vote created successfully");
 
             return request.createResponseBuilder(HttpStatus.CREATED)

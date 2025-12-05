@@ -5,7 +5,7 @@ import redis.clients.jedis.JedisPooled;
 
 import java.util.Map;
 
-public class RedisVoteRepositoryImpl implements VoteRepository {
+public class VoteRepositoryImpl implements VoteRepository {
     private static final String REDIS_HOST= System.getenv("REDIS_HOST");
     private static final Integer REDIS_PORT= Integer.valueOf(System.getenv("REDIS_PORT"));
     private static final  Boolean REDIS_SSL= Boolean.parseBoolean(System.getenv("REDIS_SSL"));

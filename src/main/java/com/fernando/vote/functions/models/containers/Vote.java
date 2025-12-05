@@ -8,11 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class Vote {
-    private String id;
-    private String poolId;
+    private String surveyId;
     private String optionId;
-    private String ip;
-    private String device;
-    private String type;
-    private long ttl;
 }
