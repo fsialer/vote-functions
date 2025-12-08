@@ -2,7 +2,9 @@ package com.fernando.vote.functions.repository.impl;
 
 import com.fernando.vote.functions.repository.VoteRepository;
 import redis.clients.jedis.JedisPooled;
+import redis.clients.jedis.params.SetParams;
 
+import java.util.List;
 import java.util.Map;
 
 public class VoteRepositoryImpl implements VoteRepository {
@@ -51,6 +53,28 @@ public class VoteRepositoryImpl implements VoteRepository {
                 REDIS_SSL
         )) {
             return jedis.hgetAll(key);
+        }
+    }
+
+    @Override
+    public String getSet(String key) {
+        try(JedisPooled jedis = new JedisPooled(
+                REDIS_HOST,
+                REDIS_PORT,
+                REDIS_SSL
+        )) {
+            return jedis.get(key);
+        }
+    }
+
+    @Override
+    public String saveSet(String key, String value) {
+        try(JedisPooled jedis = new JedisPooled(
+                REDIS_HOST,
+                REDIS_PORT,
+                REDIS_SSL
+        )) {
+            return jedis.set(key,value);
         }
     }
 }

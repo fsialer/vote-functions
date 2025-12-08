@@ -7,4 +7,7 @@ public interface VoteRepository {
     Boolean existsKey(String key);
     void appendKey(String key,String value);
     Map<String,String> getVotes(String key);
+    String getSet(String key);
+    String saveSet(String key, String value);
+
 }

@@ -11,7 +11,7 @@ public class SurveyMapper {
         return Survey.builder()
                 .question(surveyRequest.getQuestion())
                 .options(surveyRequest.getOptions().stream().map(optionRequest -> Option.builder()
-                        .id("OP"+optionRequest.getOptionId().toString())
+                        .optionId("OP"+optionRequest.getOptionId().toString())
                         .text(optionRequest.getDescription())
                         .build()).collect(Collectors.toList()))
                 .build();

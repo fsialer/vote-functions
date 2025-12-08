@@ -1,4 +1,4 @@
-package com.fernando.vote.functions.models.containers;
+package com.fernando.vote.functions.models.responses;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Option {
+public class OptionResponse {
     private String optionId;
     private String text;
     private Long votes;

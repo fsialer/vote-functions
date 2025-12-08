@@ -33,8 +33,8 @@ public class IVoteServiceImpl implements IVoteService {
         Map<String,String> votes= voteRepository.getVotes(keyVote);
         Survey survey=surveyRepository.getSurvey(surveyId.getSurveyId());
         for (Option opt: survey.getOptions()){
-            if(votes.containsKey(opt.getId())){
-                long count=Long.parseLong(votes.get(opt.getId()));
+            if(votes.containsKey(opt.getOptionId())){
+                long count=Long.parseLong(votes.get(opt.getOptionId()));
                 opt.setVotes(count);
                 totalVotes+=count;
             }
