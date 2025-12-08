@@ -9,7 +9,7 @@ public class CacheRedisRepositoryImpl implements CacheRepository {
     private static final String REDIS_HOST= System.getenv("REDIS_HOST");
     private static final Integer REDIS_PORT= Integer.valueOf(System.getenv("REDIS_PORT"));
     private static final  Boolean REDIS_SSL= Boolean.parseBoolean(System.getenv("REDIS_SSL"));
-    private static final int EXPIRATION_TIME_IN_SECOND=3600;
+    private static final int EXPIRATION_TIME_IN_SECOND=Integer.parseInt(System.getenv("EXPIRATION_TIME_IN_SECOND"));
 
     @Override
     public Long createHashSet(String key, String attribute) {
