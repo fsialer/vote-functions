@@ -1,11 +1,8 @@
 package com.fernando.vote.functions.repository;
 
-import com.fernando.vote.functions.models.containers.Option;
-import com.fernando.vote.functions.models.containers.Survey;
-
-import java.util.List;
+import com.fernando.vote.functions.models.containers.Pool;
 
 public interface SurveyRepository {
-    Survey save(Survey survey);
-    Survey getSurvey(String id);
+    Pool save(Pool pool);
+    Pool getSurvey(String id);
 }

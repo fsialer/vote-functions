@@ -5,7 +5,7 @@ import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.cosmos.CosmosContainer;
 import com.azure.cosmos.models.*;
 import com.fernando.vote.functions.exceptions.SurveyRepositoryException;
-import com.fernando.vote.functions.models.containers.Survey;
+import com.fernando.vote.functions.models.containers.Pool;
 import com.fernando.vote.functions.repository.SurveyRepository;
 
 public class SurveyRepositoryImpl implements SurveyRepository {
@@ -16,7 +16,7 @@ public class SurveyRepositoryImpl implements SurveyRepository {
     private static final String COSMO_CONTAINER_NAME= System.getenv("COSMO_CONTAINER_NAME");
 
     @Override
-    public Survey save(Survey survey) {
+    public Pool save(Pool pool) {
         try(CosmosClient client = new CosmosClientBuilder()
                 .endpoint(COSMOS_ENDPOINT)
                 .key(COSMOS_KEY)
@@ -26,17 +26,17 @@ public class SurveyRepositoryImpl implements SurveyRepository {
                     .getDatabase(System.getenv(COSMO_DB_NAME))
                     .getContainer(System.getenv(COSMO_CONTAINER_NAME));
 
-            CosmosItemResponse<Survey> response=container.upsertItem(survey,new PartitionKey(survey.getPoolId()),new CosmosItemRequestOptions());
+            CosmosItemResponse<Pool> response=container.upsertItem(pool,new PartitionKey(pool.getPoolId()),new CosmosItemRequestOptions());
             
             if (response.getStatusCode()>=400) {
                 throw new SurveyRepositoryException("Failed to save survey with status: " + response.getStatusCode());
             }
         }
-        return survey;
+        return pool;
     }
 
     @Override
-    public Survey getSurvey(String id) {
+    public Pool getSurvey(String id) {
         try(CosmosClient client = new CosmosClientBuilder()
                 .endpoint(COSMOS_ENDPOINT)
                 .key(COSMOS_KEY)
@@ -45,7 +45,7 @@ public class SurveyRepositoryImpl implements SurveyRepository {
             CosmosContainer container = client
                     .getDatabase(COSMO_DB_NAME)
                     .getContainer(COSMO_CONTAINER_NAME);
-            CosmosItemResponse<Survey> response=container.readItem(id,new PartitionKey("/poolId"),Survey.class);
+            CosmosItemResponse<Pool> response=container.readItem(id,new PartitionKey("/poolId"), Pool.class);
             return response.getItem();
         }
     }

@@ -88,6 +88,13 @@
             <version>7.14.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.azure.resourcemanager/azure-resourcemanager-signalr -->
+        <dependency>
+            <groupId>com.azure.resourcemanager</groupId>
+            <artifactId>azure-resourcemanager-signalr</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

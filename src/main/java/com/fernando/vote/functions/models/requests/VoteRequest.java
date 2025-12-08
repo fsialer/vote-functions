@@ -10,9 +10,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class VoteRequest {
-    @JsonProperty("survey_id")
-    @NotNull(message = "survey_id is required.")
-    private String surveyId;
+    @JsonProperty("pool_id")
+    @NotNull(message = "pool_id is required.")
+    private String poolId;
     @JsonProperty("option_id")
     @NotNull(message = "option_id is required.")
     private String optionId;

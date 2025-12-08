@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Survey {
+public class Pool {
     private String id;
     private String poolId;
     private String question;

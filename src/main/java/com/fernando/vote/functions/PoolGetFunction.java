@@ -3,7 +3,7 @@ package com.fernando.vote.functions;
 import java.io.IOException;
 import java.util.*;
 
-import com.fernando.vote.functions.models.containers.Survey;
+import com.fernando.vote.functions.models.containers.Pool;
 import com.fernando.vote.functions.services.ISurveyService;
 import com.fernando.vote.functions.services.impl.SurveyServiceImpl;
 import com.microsoft.azure.functions.annotation.*;
@@ -27,7 +27,7 @@ public class PoolGetFunction {
         String id = request.getUri().getPath().split("/")[2]; // Se asume que la ruta sigue el patrón "/hola/{id}"
         try{
             ISurveyService iSurveyService=new SurveyServiceImpl();
-            Survey pool=iSurveyService.getPool(id);
+            Pool pool=iSurveyService.getPool(id);
             return request.createResponseBuilder(HttpStatus.OK)
                     .header("Content-Type", "application/json")
                     .body(pool).build();

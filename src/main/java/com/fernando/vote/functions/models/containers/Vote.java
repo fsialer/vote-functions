@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class Vote {
-    private String surveyId;
+    private String poolId;
     private String optionId;
 }

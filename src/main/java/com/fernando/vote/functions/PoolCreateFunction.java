@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fernando.vote.functions.mapper.SurveyMapper;
-import com.fernando.vote.functions.models.containers.Survey;
-import com.fernando.vote.functions.models.requests.SurveyRequest;
+import com.fernando.vote.functions.models.containers.Pool;
+import com.fernando.vote.functions.models.requests.PoolRequest;
 import com.fernando.vote.functions.services.ISurveyService;
 import com.fernando.vote.functions.services.impl.SurveyServiceImpl;
 import com.microsoft.azure.functions.annotation.*;
@@ -20,7 +20,7 @@ import jakarta.validation.ValidatorFactory;
 /**
  * Azure Functions with HTTP Trigger.
  */
-public class SurveyCreateFunction {
+public class PoolCreateFunction {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ValidatorFactory factory = Validation.byDefaultProvider()
             .configure()
@@ -28,7 +28,7 @@ public class SurveyCreateFunction {
             .buildValidatorFactory();
     private final Validator validator = factory.getValidator();
 
-    @FunctionName("SurveyCreateFunction")
+    @FunctionName("PoolCreateFunction")
     public HttpResponseMessage run(
             @HttpTrigger(name = "req", methods = {HttpMethod.GET, HttpMethod.POST}, authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) throws JsonProcessingException {
@@ -38,9 +38,9 @@ public class SurveyCreateFunction {
                     .body("{\"error\":\"Request body is required\"}").build();
         }
         
-        SurveyRequest surveyRequest = objectMapper.readValue(body, SurveyRequest.class);
+        PoolRequest poolRequest = objectMapper.readValue(body, PoolRequest.class);
 
-        Set<ConstraintViolation<SurveyRequest>> violations = validator.validate(surveyRequest);
+        Set<ConstraintViolation<PoolRequest>> violations = validator.validate(poolRequest);
         if (!violations.isEmpty()) {
             String errors = violations.stream()
                     .map(ConstraintViolation::getMessage)
@@ -52,10 +52,10 @@ public class SurveyCreateFunction {
         try {
             SurveyMapper mapper=new SurveyMapper();
             ISurveyService iSurveyService=new SurveyServiceImpl();
-            Survey createdSurvey = iSurveyService.createSurvey(mapper.surverRequestToSurvey(surveyRequest));
+            Pool createdPool = iSurveyService.createSurvey(mapper.surverRequestToSurvey(poolRequest));
             
             Map<String, String> response = new HashMap<>();
-            response.put("id", createdSurvey.getPoolId());
+            response.put("id", createdPool.getPoolId());
             response.put("message", "Survey created successfully");
             
             return request.createResponseBuilder(HttpStatus.CREATED)

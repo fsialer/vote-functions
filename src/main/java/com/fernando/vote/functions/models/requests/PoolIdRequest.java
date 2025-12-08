@@ -7,6 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SurveyIdRequest {
-    private String surveyId;
+public class PoolIdRequest {
+    private String poolId;
 }
