@@ -1,13 +1,11 @@
 package com.fernando.vote.functions.repository.impl;
 
-import com.fernando.vote.functions.repository.VoteRepository;
+import com.fernando.vote.functions.repository.CacheRepository;
 import redis.clients.jedis.JedisPooled;
-import redis.clients.jedis.params.SetParams;
 
-import java.util.List;
 import java.util.Map;
 
-public class VoteRepositoryImpl implements VoteRepository {
+public class CacheRedisRepositoryImpl implements CacheRepository {
     private static final String REDIS_HOST= System.getenv("REDIS_HOST");
     private static final Integer REDIS_PORT= Integer.valueOf(System.getenv("REDIS_PORT"));
     private static final  Boolean REDIS_SSL= Boolean.parseBoolean(System.getenv("REDIS_SSL"));
