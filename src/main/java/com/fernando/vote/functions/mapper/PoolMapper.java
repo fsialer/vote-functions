@@ -6,8 +6,8 @@ import com.fernando.vote.functions.models.requests.PoolRequest;
 
 import java.util.stream.Collectors;
 
-public class SurveyMapper {
-    public Pool surverRequestToSurvey(PoolRequest poolRequest){
+public class PoolMapper {
+    public Pool poolRequestToPool(PoolRequest poolRequest){
         return Pool.builder()
                 .question(poolRequest.getQuestion())
                 .options(poolRequest.getOptions().stream().map(optionRequest -> Option.builder()

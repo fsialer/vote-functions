@@ -6,16 +6,16 @@ import com.fernando.vote.functions.models.containers.Option;
 import com.fernando.vote.functions.models.containers.Pool;
 import com.fernando.vote.functions.models.containers.PoolId;
 import com.fernando.vote.functions.models.containers.Vote;
-import com.fernando.vote.functions.repository.SurveyRepository;
+import com.fernando.vote.functions.repository.PoolRepository;
 import com.fernando.vote.functions.repository.CacheRepository;
-import com.fernando.vote.functions.repository.impl.SurveyRepositoryImpl;
+import com.fernando.vote.functions.repository.impl.PoolRepositoryImpl;
 import com.fernando.vote.functions.repository.impl.CacheRedisRepositoryImpl;
 import com.fernando.vote.functions.services.IVoteService;
 
 import java.util.Map;
 
 public class IVoteServiceImpl implements IVoteService {
-    private final SurveyRepository surveyRepository=new SurveyRepositoryImpl();
+    private final PoolRepository poolRepository =new PoolRepositoryImpl();
     private final CacheRepository cacheRepository =new CacheRedisRepositoryImpl();
     private final ServiceBusEvent serviceBusEvent=new VoteServiceBusEventImpl();
     @Override
@@ -31,7 +31,7 @@ public class IVoteServiceImpl implements IVoteService {
         long totalVotes=0L;
         String keyVote="votes:"+ poolId.getPoolId();
         Map<String,String> votes= cacheRepository.getHashSet(keyVote);
-        Pool pool =surveyRepository.getSurvey(poolId.getPoolId());
+        Pool pool = poolRepository.getPoolById(poolId.getPoolId());
         for (Option opt: pool.getOptions()){
             if(votes.containsKey(opt.getOptionId())){
                 long count=Long.parseLong(votes.get(opt.getOptionId()));
@@ -42,7 +42,7 @@ public class IVoteServiceImpl implements IVoteService {
         long diff=totalVotes- pool.getTotalVotes();
         if(diff>0){
             pool.setTotalVotes(totalVotes);
-            surveyRepository.save(pool);
+            poolRepository.save(pool);
         }
     }
 

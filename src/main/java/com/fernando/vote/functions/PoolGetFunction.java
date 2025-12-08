@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.*;
 
 import com.fernando.vote.functions.models.containers.Pool;
-import com.fernando.vote.functions.services.ISurveyService;
-import com.fernando.vote.functions.services.impl.SurveyServiceImpl;
+import com.fernando.vote.functions.services.PoolService;
+import com.fernando.vote.functions.services.impl.PoolServiceImpl;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
 
@@ -26,8 +26,8 @@ public class PoolGetFunction {
             final ExecutionContext context) {
         String id = request.getUri().getPath().split("/")[2]; // Se asume que la ruta sigue el patrón "/hola/{id}"
         try{
-            ISurveyService iSurveyService=new SurveyServiceImpl();
-            Pool pool=iSurveyService.getPool(id);
+            PoolService poolService =new PoolServiceImpl();
+            Pool pool= poolService.getPool(id);
             return request.createResponseBuilder(HttpStatus.OK)
                     .header("Content-Type", "application/json")
                     .body(pool).build();

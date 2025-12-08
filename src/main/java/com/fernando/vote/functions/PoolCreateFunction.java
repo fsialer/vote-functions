@@ -5,11 +5,11 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fernando.vote.functions.mapper.SurveyMapper;
+import com.fernando.vote.functions.mapper.PoolMapper;
 import com.fernando.vote.functions.models.containers.Pool;
 import com.fernando.vote.functions.models.requests.PoolRequest;
-import com.fernando.vote.functions.services.ISurveyService;
-import com.fernando.vote.functions.services.impl.SurveyServiceImpl;
+import com.fernando.vote.functions.services.PoolService;
+import com.fernando.vote.functions.services.impl.PoolServiceImpl;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
 import jakarta.validation.ConstraintViolation;
@@ -50,9 +50,9 @@ public class PoolCreateFunction {
         }
 
         try {
-            SurveyMapper mapper=new SurveyMapper();
-            ISurveyService iSurveyService=new SurveyServiceImpl();
-            Pool createdPool = iSurveyService.createSurvey(mapper.surverRequestToSurvey(poolRequest));
+            PoolMapper mapper=new PoolMapper();
+            PoolService poolService =new PoolServiceImpl();
+            Pool createdPool = poolService.createPool(mapper.poolRequestToPool(poolRequest));
             
             Map<String, String> response = new HashMap<>();
             response.put("id", createdPool.getPoolId());

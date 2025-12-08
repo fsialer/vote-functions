@@ -2,26 +2,26 @@ package com.fernando.vote.functions.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fernando.vote.functions.models.containers.Pool;
-import com.fernando.vote.functions.repository.SurveyRepository;
+import com.fernando.vote.functions.repository.PoolRepository;
 import com.fernando.vote.functions.repository.CacheRepository;
-import com.fernando.vote.functions.repository.impl.SurveyRepositoryImpl;
+import com.fernando.vote.functions.repository.impl.PoolRepositoryImpl;
 import com.fernando.vote.functions.repository.impl.CacheRedisRepositoryImpl;
-import com.fernando.vote.functions.services.ISurveyService;
+import com.fernando.vote.functions.services.PoolService;
 
 import java.io.IOException;
 import java.util.UUID;
 
-public class SurveyServiceImpl implements ISurveyService {
+public class PoolServiceImpl implements PoolService {
 
-    private final SurveyRepository surveyRepository=new SurveyRepositoryImpl();
+    private final PoolRepository poolRepository =new PoolRepositoryImpl();
     private final CacheRepository cacheRepository =new CacheRedisRepositoryImpl();
 
     @Override
-    public Pool createSurvey(Pool pool) {
+    public Pool createPool(Pool pool) {
         String uuid= UUID.randomUUID().toString();
         pool.setId(uuid);
         pool.setPoolId(uuid);
-        return surveyRepository.save(pool);
+        return poolRepository.save(pool);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class SurveyServiceImpl implements ISurveyService {
             String strPool= cacheRepository.getSet(keyPool);
             suv=obj.readValue( strPool, Pool.class);
         }else{
-            suv=surveyRepository.getSurvey(id);
+            suv= poolRepository.getPoolById(id);
             cacheRepository.createSet(keyPool,obj.convertValue(suv,String.class),true);
         }
         return suv;

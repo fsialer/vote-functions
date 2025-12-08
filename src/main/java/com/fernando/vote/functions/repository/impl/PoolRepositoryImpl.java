@@ -4,11 +4,11 @@ import com.azure.cosmos.CosmosClient;
 import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.cosmos.CosmosContainer;
 import com.azure.cosmos.models.*;
-import com.fernando.vote.functions.exceptions.SurveyRepositoryException;
+import com.fernando.vote.functions.exceptions.PoolRepositoryException;
 import com.fernando.vote.functions.models.containers.Pool;
-import com.fernando.vote.functions.repository.SurveyRepository;
+import com.fernando.vote.functions.repository.PoolRepository;
 
-public class SurveyRepositoryImpl implements SurveyRepository {
+public class PoolRepositoryImpl implements PoolRepository {
 
     private static final String COSMOS_ENDPOINT= System.getenv("COSMOS_ENDPOINT");
     private static final String COSMOS_KEY= System.getenv("COSMOS_KEY");
@@ -29,14 +29,14 @@ public class SurveyRepositoryImpl implements SurveyRepository {
             CosmosItemResponse<Pool> response=container.upsertItem(pool,new PartitionKey(pool.getPoolId()),new CosmosItemRequestOptions());
             
             if (response.getStatusCode()>=400) {
-                throw new SurveyRepositoryException("Failed to save survey with status: " + response.getStatusCode());
+                throw new PoolRepositoryException("Failed to save survey with status: " + response.getStatusCode());
             }
         }
         return pool;
     }
 
     @Override
-    public Pool getSurvey(String id) {
+    public Pool getPoolById(String id) {
         try(CosmosClient client = new CosmosClientBuilder()
                 .endpoint(COSMOS_ENDPOINT)
                 .key(COSMOS_KEY)
