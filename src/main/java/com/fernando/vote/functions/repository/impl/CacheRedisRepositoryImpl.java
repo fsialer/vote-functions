@@ -13,7 +13,7 @@ public class VoteRepositoryImpl implements VoteRepository {
     private static final  Boolean REDIS_SSL= Boolean.parseBoolean(System.getenv("REDIS_SSL"));
 
     @Override
-    public Long saveVote(String key,String attribute) {
+    public Long createHashSet(String key, String attribute) {
         try(JedisPooled jedis = new JedisPooled(
                 REDIS_HOST,
                 REDIS_PORT,
@@ -46,7 +46,7 @@ public class VoteRepositoryImpl implements VoteRepository {
     }
 
     @Override
-    public Map<String, String> getVotes(String key) {
+    public Map<String, String> getHashSet(String key) {
         try(JedisPooled jedis = new JedisPooled(
                 REDIS_HOST,
                 REDIS_PORT,
@@ -68,7 +68,7 @@ public class VoteRepositoryImpl implements VoteRepository {
     }
 
     @Override
-    public String saveSet(String key, String value) {
+    public String createSet(String key, String value) {
         try(JedisPooled jedis = new JedisPooled(
                 REDIS_HOST,
                 REDIS_PORT,
