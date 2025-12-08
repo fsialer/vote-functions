@@ -20,5 +20,5 @@ public class PoolRequest {
     @JsonProperty("options")
     @Size(min = 2, message = "At least two options are required.")
     @Valid
-    private Set<OptionRequest> options;
+    private Set<String> options;
 }

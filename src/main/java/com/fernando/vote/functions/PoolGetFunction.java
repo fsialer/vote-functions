@@ -22,7 +22,7 @@ public class PoolGetFunction {
      */
     @FunctionName("PoolGetFunction")
     public HttpResponseMessage run(
-            @HttpTrigger(name = "req", methods = {HttpMethod.GET, HttpMethod.POST}, authLevel = AuthorizationLevel.FUNCTION, route = "{id}") HttpRequestMessage<Optional<String>> request,
+            @HttpTrigger(name = "req", methods = {HttpMethod.GET, HttpMethod.POST}, authLevel = AuthorizationLevel.FUNCTION, route = "PoolGetFunction/{id}") HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
         String id = request.getUri().getPath().split("/")[2]; // Se asume que la ruta sigue el patrón "/hola/{id}"
         try{
