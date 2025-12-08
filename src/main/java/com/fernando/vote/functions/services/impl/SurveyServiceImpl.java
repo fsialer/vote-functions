@@ -34,7 +34,7 @@ public class SurveyServiceImpl implements ISurveyService {
             suv=obj.readValue( strPool,Survey.class);
         }else{
             suv=surveyRepository.getSurvey(id);
-            cacheRepository.createSet(keyPool,obj.convertValue(suv,String.class));
+            cacheRepository.createSet(keyPool,obj.convertValue(suv,String.class),true);
         }
         return suv;
     }

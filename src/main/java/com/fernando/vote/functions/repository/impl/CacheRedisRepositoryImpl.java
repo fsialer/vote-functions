@@ -9,6 +9,7 @@ public class CacheRedisRepositoryImpl implements CacheRepository {
     private static final String REDIS_HOST= System.getenv("REDIS_HOST");
     private static final Integer REDIS_PORT= Integer.valueOf(System.getenv("REDIS_PORT"));
     private static final  Boolean REDIS_SSL= Boolean.parseBoolean(System.getenv("REDIS_SSL"));
+    private static final int EXPIRATION_TIME_IN_SECOND=3600;
 
     @Override
     public Long createHashSet(String key, String attribute) {
@@ -66,12 +67,15 @@ public class CacheRedisRepositoryImpl implements CacheRepository {
     }
 
     @Override
-    public String createSet(String key, String value) {
+    public String createSet(String key, String value,Boolean ttl) {
         try(JedisPooled jedis = new JedisPooled(
                 REDIS_HOST,
                 REDIS_PORT,
                 REDIS_SSL
         )) {
+            if(ttl){
+                return jedis.setex(key,EXPIRATION_TIME_IN_SECOND,value);
+            }
             return jedis.set(key,value);
         }
     }

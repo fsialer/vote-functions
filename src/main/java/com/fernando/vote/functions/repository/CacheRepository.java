@@ -8,6 +8,6 @@ public interface CacheRepository {
     void appendKey(String key,String value);
     Map<String,String> getHashSet(String key);
     String getSet(String key);
-    String createSet(String key, String value);
+    String createSet(String key, String value,Boolean ttl);
 
 }
